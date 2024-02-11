@@ -6,7 +6,6 @@ status_update_table b on
 a.ticket_id = b.ticket_id
 
 
-
 Q2:Write an SQL query to find the top 10 customers from each day(sunday,monday,tues etc.,) based on their purchase value with overall order quantity <10
 Ans: 
 With ct
@@ -28,11 +27,6 @@ FROM
     employee_details
 GROUP BY
     employee_id;
-
-
-
-
-
 
 
 Q4: Write an sql query to identify the 2nd-rank student in every class, considering only those students who meet the attendance criteria based on the class's eligibility percentage
