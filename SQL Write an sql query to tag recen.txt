@@ -1,0 +1,86 @@
+SQL: Write an sql query to tag recent call bridge duration & recording link to the status of Out for delivery , Customer reschedule,Delivered
+Ans1: 
+Select a.Ticket_id, ticket status, status update timestamp, call bridge duration, recording link from call_cridge_table a 
+inner join 
+status_update_table b on
+a.ticket_id = b.ticket_id
+
+
+
+Q2:Write an SQL query to find the top 10 customers from each day(sunday,monday,tues etc.,) based on their purchase value with overall order quantity <10
+Ans: 
+With ct
+As
+(Select *, row-number() over (partition by day order by totalvalue) as rw from table name) 
+Select day, customer I'd from ct where rw less than 11 order by 1,2
+
+
+Q3: Given an employee_details table with columns employee_id, payment_component and amount. Column payment_component has only 3 values : salary, bonus and hike.
+
+Write a SQL query to get employee compensation information in format given below : 
+
+SELECT
+    employee_id,
+    MAX(CASE WHEN payment_component = 'salary' THEN amount ELSE 0 END) AS salary,
+    MAX(CASE WHEN payment_component = 'bonus' THEN amount ELSE 0 END) AS bonus,
+    MAX(CASE WHEN payment_component = 'hike' THEN amount ELSE 0 END) AS hike
+FROM
+    employee_details
+GROUP BY
+    employee_id;
+
+
+
+
+
+
+
+Q4: Write an sql query to identify the 2nd-rank student in every class, considering only those students who meet the attendance criteria based on the class's eligibility percentage
+
+Attributes in detail
+1.Marks:School-school name,Class-Class identifier,Student_id-Student identifier,Subject-Subject identifier,Marks-Marks student got in each subject
+2.Attendance:Student_id-Student identifier (Primary Key),Present_days-Student present days in the academic year
+3.Class_Eligibility:Class-Class identifier (Primary Key),Eligible %-Eligible Attendance Percentage for each class,Total_days-Total working class days in the academic year
+4.Student:Student_id-Student identifier (Primary Key),Student_name:Name of the student
+Note:Rank should be based on total marks and present_days/total_days is the actual attendance % of the student
+
+WITH RankedStudents AS (
+    SELECT
+        s.Class,
+        m.Student_id,
+        s.Student_name,
+        m.Subject,
+        m.Marks,
+        a.Present_days,
+        ce.Eligible_Percentage,
+        ROW_NUMBER() OVER (PARTITION BY s.Class ORDER BY (m.Marks DESC, a.Present_days / ce.Total_days DESC) DESC) AS StudentRank
+    FROM
+        Marks m
+        JOIN Student s ON m.Student_id = s.Student_id
+        JOIN Attendance a ON m.Student_id = a.Student_id
+        JOIN Class_Eligibility ce ON s.Class = ce.Class
+)
+SELECT
+    Class,
+    Student_id,
+    Student_name,
+    Subject,
+    Marks,
+    Present_days,
+    Eligible_Percentage
+FROM
+    RankedStudents
+WHERE
+    StudentRank = 2;
+
+
+
+
+
+
+
+
+
+
+
+
